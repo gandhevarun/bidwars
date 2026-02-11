@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDWARS - Access</title>
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- LEFT SIDE (BRANDING) --- */
+        .brand-section {
+            flex: 1;
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+            position: relative;
+        }
+
+        .brand-content h1 {
+            font-size: 4rem;
+            line-height: 1;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .brand-content p {
+            font-size: 1.1rem;
+            color: #ccc;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .brand-line {
+            width: 100px;
+            height: 5px;
+            background: #fff;
+            margin-bottom: 30px;
+        }
+
+        .floating-logo {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* --- RIGHT SIDE (AUTH) --- */
+        .auth-section {
+            width: 500px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .toggle-box {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #888;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            color: #000;
+            border-bottom: 2px solid #000;
+        }
+
+        /* --- INPUT STYLING --- */
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 0;
+            top: 15px;
+            font-size: 0.9rem;
+            color: #8e8e8e;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            text-transform: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 0 5px 0;
+            border: none;
+            border-bottom: 1px solid #dbdbdb;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+
+        /* Floating Label Logic */
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -5px;
+            font-size: 0.7rem;
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .input-group input:focus {
+            border-bottom: 1px solid #000;
+        }
+
+        /* Validation Colors */
+        .input-group.error input { border-bottom-color: #ed4956; }
+        .input-group.error label { color: #ed4956; }
+
+        .validation-msg {
+            font-size: 0.7rem;
+            color: #ed4956;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: opacity 0.3s;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-box { display: none; }
+        .form-box.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; overflow-y: auto; }
+            .brand-section { padding: 40px; min-height: 200px; flex: none; }
+            .brand-content h1 { font-size: 2.5rem; }
+            .auth-section { width: 100%; padding: 40px; flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="brand-section">
+        <a href="#" class="floating-logo">BIDWARS</a>
+        <div class="brand-content">
+            <div class="brand-line"></div>
+            <h1>Auction<br>Without<br>Limits.</h1>
+            <p>Join the premium marketplace crafted for the bold. Your next asset awaits.</p>
+        </div>
+    </div>
+
+    <div class="auth-section">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2 id="header-title">Welcome Back</h2>
+            </div>
+
+            <div class="toggle-box">
+                <button class="toggle-btn active" onclick="switchTab('login')">Log In</button>
+                <button class="toggle-btn" onclick="switchTab('register')">Sign Up</button>
+            </div>
+
+            <form id="login-form" class="form-box active" oninput="validateLogin()">
+                <div class="input-group">
+                    <input type="text" id="login-id" placeholder=" " required>
+                    <label>Username or Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-pass" placeholder=" " required>
+                    <label>Password</label>
+                </div>
+                <button type="submit" id="login-btn" class="submit-btn" disabled>Enter Arena</button>
+            </form>
+
+            <form id="register-form" class="form-box" oninput="validateRegister()">
+                <div class="input-group">
+                    <input type="text" id="reg-name" placeholder=" " required>
+                    <label>Full Name</label>
+                </div>
+                <div class="input-group" id="reg-user-group">
+                    <input type="text" id="reg-user" placeholder=" " required>
+                    <label>Username</label>
+                    <p class="validation-msg">Username must be at least 3 characters</p>
+                </div>
+                <div class="input-group" id="reg-email-group">
+                    <input type="email" id="reg-email" placeholder=" " required>
+                    <label>Email</label>
+                    <p class="validation-msg">Enter a valid email address</p>
+                </div>
+                <div class="input-group" id="reg-pass-group">
+                    <input type="password" id="reg-pass" placeholder=" " required>
+                    <label>Password</label>
+                    <p class="validation-msg">Password must be at least 6 characters</p>
+                </div>
+                <button type="submit" id="reg-btn" class="submit-btn" disabled>Join Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const btns = document.querySelectorAll('.toggle-btn');
+            const title = document.getElementById('header-title');
+
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                btns[0].classList.add('active');
+                title.innerText = "Welcome Back";
+            } else {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                btns[1].classList.add('active');
+                title.innerText = "Create Account";
+            }
+        }
+
+        // --- VALIDATION LOGIC ---
+
+        function validateEmail(email) {
+            return String(email).toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        }
+
+        function validateLogin() {
+            const id = document.getElementById('login-id').value;
+            const pass = document.getElementById('login-pass').value;
+            const btn = document.getElementById('login-btn');
+            btn.disabled = !(id.length > 0 && pass.length >= 6);
+        }
+
+        function validateRegister() {
+            const user = document.getElementById('reg-user').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+            const btn = document.getElementById('reg-btn');
+
+            // Visual feedback for email
+            const emailGroup = document.getElementById('reg-email-group');
+            if (email.length > 0 && !validateEmail(email)) {
+                emailGroup.classList.add('error');
+                emailGroup.querySelector('.validation-msg').style.display = 'block';
+            } else {
+                emailGroup.classList.remove('error');
+                emailGroup.querySelector('.validation-msg').style.display = 'none';
+            }
+
+            // Visual feedback for password
+            const passGroup = document.getElementById('reg-pass-group');
+            if (pass.length > 0 && pass.length < 6) {
+                passGroup.classList.add('error');
+                passGroup.querySelector('.validation-msg').style.display = 'block';
+            } else {
+                passGroup.classList.remove('error');
+                passGroup.querySelector('.validation-msg').style.display = 'none';
+            }
+
+            // Master Enable/Disable
+            const isValid = (user.length >= 3 && validateEmail(email) && pass.length >= 6);
+            btn.disabled = !isValid;
+        }
+    </script>
+</body>
+</html>

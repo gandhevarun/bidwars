@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIDWARS | Premium Auctions</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #ffffff;
+            --text-main: #000000;
+            --gray-border: #e0e0e0;
+            --gray-subtle: #f8f8f8;
+            --gray-text: #666666;
+            --live-red: #ff0000;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            border-bottom: 1px solid var(--gray-border);
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            color: #000 !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .nav-link {
+            color: var(--text-main) !important;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            opacity: 0.6;
+        }
+
+        /* Hero */
+        .hero-section {
+            padding: 120px 0;
+            background-color: var(--gray-subtle);
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        /* Buttons */
+        .btn-bw {
+            background: #000;
+            border: 1px solid #000;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 0;
+            padding: 12px 30px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .btn-bw:hover {
+            background: transparent;
+            color: #000;
+        }
+
+        .btn-outline-bw {
+            background: transparent;
+            border: 1px solid #000;
+            color: #000;
+            border-radius: 0;
+            padding: 12px 30px;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .btn-outline-bw:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        /* Auction Cards */
+        .card {
+            background: #fff;
+            border: 1px solid var(--gray-border);
+            border-radius: 0;
+            transition: 0.4s;
+            color: #000;
+        }
+
+        .card:hover {
+            border-color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-img-top {
+            border-bottom: 1px solid var(--gray-border);
+            filter: grayscale(100%);
+            transition: 0.5s;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card:hover .card-img-top {
+            filter: grayscale(0%);
+        }
+
+        /* Live Indicator */
+        .live-badge {
+            background: var(--live-red);
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .form-control {
+            background: var(--gray-subtle);
+            border: 1px solid var(--gray-border);
+            border-radius: 0;
+        }
+
+        footer {
+            border-top: 1px solid var(--gray-border);
+            color: var(--gray-text);
+            background: var(--gray-subtle);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                BIDWARS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link px-3" href="#previous">Previous Drops</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#live-section">Live Auctions</a></li>
+
+                    <li class="nav-item"><a class="nav-link px-3" href="#" data-bs-toggle="modal"
+                            data-bs-target="#termsModal">T&C</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a href="auth.html" class="btn btn-bw btn-sm">Join Arena</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-2 fw-bold mb-4 text-uppercase">Auction Without Limits</h1>
+            <p class="lead mb-5 text-muted px-md-5">A premium marketplace crafted for the bold and visionary. Engage in
+                real-time bidding on rare assets where every bid defines prestige.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="register.html" class="btn btn-bw">Get Started</a>
+                <a href="#live-section" class="btn btn-outline-bw">Live Auctions</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="previous" class="py-5">
+        <div class="container py-5">
+            <h3 class="mb-5 fw-bold text-uppercase border-bottom pb-3">Previous Drops</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://www.montereytouringvehicles.com/wp-content/uploads/2024/01/1961Caddy1-copy-scaled.jpg"
+                            class="card-img-top" alt="Vintage Car">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">1961 Cadillac Sedan</h5>
+                            <p class="text-muted small mb-3">Winning Bid: <span class="text-dark fw-bold">₹
+                                    89,42,000</span></p>
+                            <button class="btn btn-outline-bw w-100 disabled">Sold</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://i0.wp.com/myportraithub.com/wp-content/uploads/2012/08/Roll-Film-Camera-for-Portrait-Photography.jpg?resize=775%2C523"
+                            class="card-img-top" alt="Camera">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">Obsidian Lens MK-1</h5>
+                            <p class="text-muted small mb-3">Winning Bid: <span class="text-dark fw-bold">₹ 3,400</span>
+                            </p>
+                            <button class="btn btn-outline-bw w-100 disabled">Sold</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500"
+                            class="card-img-top" alt="Art">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">Abstract Study #04</h5>
+                            <p class="text-muted small mb-3">Winning Bid: <span class="text-dark fw-bold">₹ 800</span>
+                            </p>
+                            <button class="btn btn-outline-bw w-100 disabled">Sold</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="live-section" class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="d-flex align-items-center mb-5 border-bottom pb-3">
+                <h3 class="fw-bold text-uppercase mb-0 me-3">Live Auctions</h3>
+                <span class="badge bg-danger">In Progress</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-dark">
+                        <span class="live-badge">Live</span>
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"
+                            class="card-img-top" alt="Watch">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">Chronos Carbon Pro</h5>
+                            <p class="text-muted small mb-3">Current Bid: <span class="text-dark fw-bold">₹
+                                    20,500/-</span></p>
+                            <button class="btn btn-bw w-100">Bid Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-dark">
+                        <span class="live-badge">Live</span>
+                        <img src="https://images.unsplash.com/photo-1512446816042-444d641267d4?w=600"
+                            class="card-img-top" alt="Apartment">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">Skyline Loft Key</h5>
+                            <p class="text-muted small mb-3">Current Bid: <span class="text-dark fw-bold">₹ 4.5L </span>
+                            </p>
+                            <button class="btn btn-bw w-100">Bid Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-dark">
+                        <span class="live-badge">Live</span>
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600" class="card-img-top"
+                            alt="Book">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-uppercase fw-bold">First Edition "The Void"</h5>
+                            <p class="text-muted small mb-3">Current Bid: <span class="text-dark fw-bold">₹
+                                    20,100</span></p>
+                            <button class="btn btn-bw w-100">Bid Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5">
+        <div class="container py-5 text-center">
+            <h2 class="display-5 fw-bold mb-4 text-uppercase">Contact Us</h2>
+            <p class="mb-5 text-muted mx-auto" style="max-width: 600px;">Our agents are available 24/7 to assist with
+                technical issues or listing inquiries.</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form class="p-4 border text-start">
+                        <div class="mb-3"><input type="text" class="form-control" placeholder="Name"></div>
+                        <div class="mb-3"><input type="email" class="form-control" placeholder="Email"></div>
+                        <div class="mb-3"><textarea class="form-control" rows="4" placeholder="Message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-bw w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container text-center">
+            <p class="mb-3">&copy; 2026 BIDWARS. Developed for the bold.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#" class="text-dark text-decoration-none small" data-bs-toggle="modal"
+                    data-bs-target="#termsModal">Terms & Conditions</a>
+                <a href="#" class="text-dark text-decoration-none small">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Platform Policies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="fw-bold">1. User Eligibility</h6>
+                    <p>Users must be at least 18 years old and legally capable of entering into binding contracts to
+                        participate in auctions.</p>
+
+                    <h6 class="fw-bold">2. Account Responsibility</h6>
+                    <p>Users are responsible for maintaining the confidentiality of their login credentials and all
+                        activities under their account.</p>
+
+                    <h6 class="fw-bold">3. Bidding Commitments</h6>
+                    <p>Every bid placed is final and legally binding. Winning bidders must complete payment within the
+                        specified timeframe.</p>
+
+                    <h6 class="fw-bold">4. Payment & Transactions</h6>
+                    <p>All payments must be processed through authorized payment gateways. Failure to complete
+                        transactions may result in penalties or suspension.</p>
+
+                    <h6 class="fw-bold">5. Seller Obligations</h6>
+                    <p>Sellers must ensure that all listed products are genuine, accurately described, and legally
+                        permitted for sale.</p>
+
+                    <h6 class="fw-bold">6. Anti-Fraud & Fair Use Policy</h6>
+                    <p>Any form of fraudulent activity, including shill bidding, fake accounts, or bid manipulation, is
+                        strictly prohibited.</p>
+
+                    <h6 class="fw-bold">7. Platform Rights</h6>
+                    <p>BIDWARS reserves the right to suspend or terminate accounts violating platform policies without
+                        prior notice.</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
