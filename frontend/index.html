@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BidWars — Live Auction Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { display:['Bebas Neue','sans-serif'], body:['Inter','sans-serif'], mono:['JetBrains Mono','monospace'] },
+          colors: { gold:'#F59E0B', 'gold-dark':'#D97706' }
+        }
+      }
+    }
+  </script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#0F0F0F;color:#F5F5F5;min-height:100vh}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1a1a}::-webkit-scrollbar-thumb{background:#F59E0B;border-radius:3px}
+    .glass{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08)}
+    .card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px}
+    .card:hover{border-color:#3a3a3a}
+    .btn-gold{background:linear-gradient(135deg,#F59E0B,#D97706);color:#000;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+    .btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px)}
+    .btn-gold:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-outline{background:transparent;border:1px solid #3a3a3a;color:#ccc;cursor:pointer;transition:all .2s}
+    .btn-outline:hover{border-color:#F59E0B;color:#F59E0B}
+    .input{background:#1a1a1a;border:1px solid #2a2a2a;color:#F5F5F5;border-radius:10px;padding:12px 16px;width:100%;outline:none;font-family:inherit;font-size:14px;transition:border .2s}
+    .input:focus{border-color:#F59E0B}
+    .input::placeholder{color:#555}
+    select.input option{background:#1a1a1a}
+    .badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:600}
+    .badge-live{background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+    .badge-ended{background:rgba(107,114,128,.2);color:#9ca3af;border:1px solid rgba(107,114,128,.3)}
+    .badge-gold{background:rgba(245,158,11,.15);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+    .live-dot{width:8px;height:8px;background:#ef4444;border-radius:50%;animation:pulse-dot 1.5s infinite;display:inline-block}
+    @keyframes slideIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
+    .toast{animation:slideIn .3s ease-out}
+    @keyframes countdownPulse{0%,100%{color:#F59E0B}50%{color:#ef4444}}
+    .urgent{animation:countdownPulse 1s infinite}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px}
+    .modal{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+    @keyframes streamShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .stream-skeleton{background:#0f0f0f}
+    .stream-line{height:14px;border-radius:8px;background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37%,#1c1c1c 63%);background-size:300% 100%;animation:streamShimmer 1.4s ease infinite}
+    #toasts{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0F0F0F;gap:20px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:#F59E0B;letter-spacing:.1em">BIDWARS</div>
+      <div style="color:#555;font-size:.9rem">Loading platform...</div>
+      <div style="width:40px;height:40px;border:3px solid #2a2a2a;border-top-color:#F59E0B;border-radius:50%;animation:spin .7s linear infinite"></div>
+    </div>
+  </div>
+  <div id="toasts"></div>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  <script type="text/babel" src="app.js" data-presets="react"></script>
+</body>
+</html>

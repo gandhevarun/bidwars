@@ -1,0 +1,93 @@
+erDiagram
+    USER {
+      ObjectId _id PK
+      string name
+      string email
+      string password
+      string avatar
+      string role
+      string stripeCustomerId
+      boolean isBanned
+      number totalBids
+      number wonAuctions
+      number totalSpent
+    }
+
+    AUCTION {
+      ObjectId _id PK
+      string title
+      string description
+      string category
+      ObjectId seller FK
+      number startingPrice
+      number reservePrice
+      number currentPrice
+      number buyNowPrice
+      number bidIncrement
+      date startTime
+      date endTime
+      string status
+      number bidCount
+      ObjectId currentWinner FK
+      boolean isLiveStream
+    }
+
+    BID {
+      ObjectId _id PK
+      ObjectId auction FK
+      ObjectId bidder FK
+      number amount
+      boolean isAutoBid
+      string status
+      number maxAutoBid
+    }
+
+    NOTIFICATION {
+      ObjectId _id PK
+      ObjectId user FK
+      string type
+      string title
+      string message
+      boolean isRead
+      mixed data
+    }
+
+    CATEGORY {
+      ObjectId _id PK
+      string name
+      string slug
+      string icon
+      boolean isActive
+    }
+
+    PAYMENT {
+      ObjectId _id PK
+      ObjectId auction FK
+      ObjectId buyer FK
+      ObjectId seller FK
+      number amount
+      string paymentMethod
+      string status
+    }
+
+    REVIEW {
+      ObjectId _id PK
+      ObjectId reviewer FK
+      ObjectId reviewee FK
+      ObjectId auction FK
+      number rating
+      string comment
+      string type
+    }
+
+    %% Relationships
+    USER ||--o{ AUCTION : "sells"
+    USER ||--o{ BID : "places"
+    AUCTION ||--o{ BID : "has"
+    USER ||--o{ NOTIFICATION : "receives"
+    CATEGORY ||--o{ AUCTION : "category_of" 
+    AUCTION }o--|| CATEGORY : "belongs_to"
+    AUCTION ||--o{ PAYMENT : "payment_for"
+    USER ||--o{ PAYMENT : "buyer/seller"
+    USER ||--o{ REVIEW : "writes"
+    AUCTION ||--o{ REVIEW : "about"
