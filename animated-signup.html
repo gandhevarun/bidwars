@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auction Login</title>
+
+  <!-- GSAP -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: black;
+      overflow: hidden;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #111, #000);
+    }
+
+    /* GAVEL */
+    #gavel {
+      position: absolute;
+      width: 320px;
+      top: -280px;
+      left: 50%;
+      transform-origin: 78% 22%;
+      transform: translateX(-50%) rotate(-70deg);
+      opacity: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* FLASH */
+    #flash {
+      position: fixed;
+      inset: 0;
+      background: white;
+      opacity: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* CRACKS */
+    #cracks {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* FORM */
+    .form {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      padding: 35px;
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.15);
+      z-index: 30;
+      color: white;
+      width: 320px;
+    }
+
+    .form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 4px;
+      background: #111;
+      color: white;
+    }
+
+    .form button {
+      width: 100%;
+      padding: 12px;
+      background: #caa14d;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="scene">
+
+  <!-- GAVEL -->
+  <img
+    id="gavel"
+    src="https://toppng.com/uploads/preview/gavel-11530997779ucsum3craw.png"
+  />
+
+  <!-- FLASH -->
+  <div id="flash"></div>
+
+  <!-- FULL SCREEN CRACKS -->
+  <svg id="cracks" viewBox="0 0 1000 600" preserveAspectRatio="none"></svg>
+
+  <!-- LOGIN FORM -->
+  <div class="form">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+  </div>
+
+</div>
+
+<script>
+  const gavel = document.getElementById("gavel");
+  const flash = document.getElementById("flash");
+  const cracksSVG = document.getElementById("cracks");
+  const loginBtn = document.getElementById("loginBtn");
+
+  const gavelSound = new Audio(
+    "https://orangefreesounds.com/wp-content/uploads/2025/08/Gavel-sound-effect.mp3"
+  );
+  gavelSound.volume = 0.9;
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  /* 🪟 FULL-SCREEN FRACTURE GENERATOR */
+  function generateFullScreenCracks() {
+    cracksSVG.innerHTML = "";
+
+    const cx = 500;
+    const cy = 300;
+    const mainCracks = rand(12, 18); // number of main fractures
+
+    for (let i = 0; i < mainCracks; i++) {
+      let angle = rand(0, Math.PI * 2);
+      let x = cx;
+      let y = cy;
+      let segments = rand(8, 14);
+
+      let d = `M ${x} ${y}`;
+
+      for (let s = 0; s < segments; s++) {
+        angle += rand(-0.5, 0.5);
+        const len = rand(40, 90);
+
+        x += Math.cos(angle) * len;
+        y += Math.sin(angle) * len;
+
+        d += ` L ${x} ${y}`;
+
+        /* branching micro cracks */
+        if (Math.random() < 0.35) {
+          const branchAngle = angle + rand(-1.2, 1.2);
+          let bx = x;
+          let by = y;
+          let bd = `M ${x} ${y}`;
+
+          const branchSegments = rand(3, 6);
+          for (let b = 0; b < branchSegments; b++) {
+            bx += Math.cos(branchAngle + rand(-0.3, 0.3)) * rand(20, 40);
+            by += Math.sin(branchAngle + rand(-0.3, 0.3)) * rand(20, 40);
+            bd += ` L ${bx} ${by}`;
+          }
+
+          createPath(bd, rand(0.8, 1.4));
+        }
+      }
+
+      createPath(d, rand(1.5, 2.5));
+    }
+  }
+
+  function createPath(d, width) {
+    const path = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+
+    path.setAttribute("d", d);
+    path.setAttribute("stroke", "rgba(255,255,255,0.9)");
+    path.setAttribute("stroke-width", width);
+    path.setAttribute("fill", "none");
+    path.style.strokeDasharray = 3000;
+    path.style.strokeDashoffset = 3000;
+
+    cracksSVG.appendChild(path);
+  }
+
+  /* 🔨 SINGLE GAVEL STRIKE */
+  function singleStrike() {
+    return new Promise(resolve => {
+      generateFullScreenCracks();
+      gavel.style.opacity = 1;
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gavel.style.opacity = 0;
+          resolve();
+        }
+      });
+
+      tl.to(gavel, {
+        duration: 0.8,
+        y: rand(360, 420),
+        rotate: rand(-15, 10),
+        ease: "power4.out"
+      })
+
+      .to(gavel, {
+        duration: 0.12,
+        y: rand(430, 470),
+        rotate: 0,
+        ease: "power4.in",
+        onStart: () => gavelSound.play()
+      })
+
+      .to(flash, { opacity: 1, duration: 0.05 })
+      .to(flash, { opacity: 0, duration: 0.25 })
+
+      .to("#scene", {
+        x: rand(-14, 14),
+        y: rand(-10, 10),
+        duration: 0.05,
+        repeat: 4,
+        yoyo: true
+      })
+
+      .to("#cracks path", {
+        strokeDashoffset: 0,
+        duration: 0.6,
+        stagger: 0.01,
+        ease: "power2.out"
+      });
+    });
+  }
+
+  /* ▶ LOGIN CLICK */
+  loginBtn.addEventListener("click", async () => {
+    loginBtn.disabled = true;
+
+    await singleStrike();
+
+    // 🔐 Put real authentication here
+    alert("Proceed with authentication");
+  });
+</script>
+
+</body>
+</html>
